@@ -169,11 +169,17 @@ class ServerFileState( object ):
 def BuildRequest( request_id, method, parameters ):
   """Builds a JSON RPC request message with the supplied ID, method and method
   parameters"""
-  return _BuildMessageData( {
-    'id': request_id,
-    'method': method,
-    'params': parameters,
-  } )
+  if parameters is not None:
+      return _BuildMessageData( {
+        'id': request_id,
+        'method': method,
+        'params': parameters,
+      } )
+  else:
+      return _BuildMessageData( {
+        'id': request_id,
+        'method': method,
+      } )
 
 
 def BuildNotification( method, parameters ):
@@ -212,6 +218,7 @@ def Shutdown( request_id ):
 
 def Exit():
   return BuildNotification( 'exit', None )
+  # return BuildNotification( 'exit', {} )
 
 
 def DidChangeConfiguration( config ):

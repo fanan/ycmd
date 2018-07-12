@@ -567,6 +567,14 @@ class StandardIOLanguageServerConnection( LanguageServerConnection ):
     return data
 
 
+def FilterNoneValue(item):
+  ks = []
+  for k, v in item.iteritems():
+    if v is None:
+      ks.append(k)
+  for k in ks:
+    del item[k]
+
 class LanguageServerCompleter( Completer ):
   """
   Abstract completer implementation for Language Server Protocol. Concrete
@@ -851,6 +859,8 @@ class LanguageServerCompleter( Completer ):
       # First, resolve the completion.
       if resolve_completion_items:
         item = self._ResolveCompletionItem( item )
+
+      FilterNoneValue(item)
 
       try:
         insertion_text, fixits, start_codepoint = (
